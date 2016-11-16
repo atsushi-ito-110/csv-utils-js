@@ -1,4 +1,5 @@
 
+## How to use
 ```
 var header_line = "id,name,profile.birth.year,profile.birth.day,profile.blood,profile.address";
 var lines = [
@@ -7,5 +8,4 @@ var lines = [
 ];
 var entries_list = CsvUtils.prototype.toHashMap(header_line, lines);
 console.log("entries_list: ", JSON.stringify(entries_list, null, 2));
-
 ```
