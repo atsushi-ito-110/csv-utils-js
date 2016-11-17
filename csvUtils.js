@@ -30,12 +30,10 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
     };
 
     var headers = header_line.split(",");
-    console.log("headers: ", JSON.stringify(headers, null, 2));
     var entries_list = [];
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
       var columns = line.split(",");
-      console.log("columns: ", JSON.stringify(columns, null, 2));
       var entries = createEntries(headers, columns);
       entries_list.push(entries);
     }
