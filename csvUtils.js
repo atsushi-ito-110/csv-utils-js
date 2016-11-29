@@ -43,3 +43,43 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
     throw e;
   }
 };
+
+CsvUtils.prototype.checkDuplicateValue = function (list, keys) {
+
+  try {
+    var keys_list = {};
+    var is_duplicate = false;
+    var messages = [];
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      keys_list[key] = [];
+    }
+    for (var i = 0; i < entries_list.length; i++) {
+      var entries = entries_list[i];
+
+      for (var j = 0; j < keys.length; j++) {
+        var key = keys[j];
+        var in_array = keys_list[key].some(function(v) {
+          return v === entries[key]
+        });
+        if (in_array === true) {
+          is_duplicate = true;
+          var message = {
+            "index": i,
+            "key": key,
+            "value": entries[key],
+            "message": "Duplicate entries"
+          }
+          messages.push(message);
+        }
+        keys_list[key].push(entries[key]);
+      }
+    }
+    return {
+      "is_duplicate": is_duplicate,
+      "messages": messages
+    };
+  } catch (e) {
+    throw e;
+  }
+};
