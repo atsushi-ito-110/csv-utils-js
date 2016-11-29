@@ -58,13 +58,18 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
 CsvUtils.prototype.checkDuplicateValue = function (list, keys) {
 
   try {
-    var keys_list = {};
     var is_duplicate = false;
     var messages = [];
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      keys_list[key] = [];
-    }
+    var keys_list = (function (keys) {
+      var keys_list = {};
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        keys_list[key] = [];
+      }
+      return keys_list;
+    })(keys);
+
+
     for (var i = 0; i < entries_list.length; i++) {
       var entries = entries_list[i];
 
@@ -80,7 +85,7 @@ CsvUtils.prototype.checkDuplicateValue = function (list, keys) {
             "key": key,
             "value": entries[key],
             "message": "Duplicate entries"
-          }
+          };
           messages.push(message);
         }
         keys_list[key].push(entries[key]);
