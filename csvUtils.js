@@ -1,7 +1,12 @@
 var CsvUtils = function () {
 };
 
-// toHashMap
+/**
+ * カンマ区切りの文字列を連想配列のリストにして返します。
+ * @param {String} header_line
+ * @param {String} lines
+ * @returns {Array}
+ */
 CsvUtils.prototype.toHashMap = function (header_line, lines) {
   try {
     var createEntries = function (headers, columns) {
@@ -44,6 +49,12 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
   }
 };
 
+/**
+ * 連想配列のリストから任意のキーで重複した値があるかチェックします
+ * @param list
+ * @param keys Array
+ * @returns {{is_duplicate: boolean, messages: Array}}
+ */
 CsvUtils.prototype.checkDuplicateValue = function (list, keys) {
 
   try {
