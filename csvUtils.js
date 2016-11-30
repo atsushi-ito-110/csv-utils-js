@@ -34,7 +34,49 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
       return entries;
     };
 
+    // trim empty line
+    (function (lines) {
+      var empty_lines = [];
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        if (line === "") empty_lines.push(i);
+      }
+      console.log(empty_lines);
+      for (var index = empty_lines.length - 1; index >= 0; index--) {
+        var target = empty_lines[index];
+        lines.splice(target, 1);
+      }
+    })(lines);
+
     var headers = header_line.split(",");
+    var result_match_columns = (function () {
+      var is_match = true;
+      var messages = [];
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        var columns = line.split(",");
+        if (headers.length === columns.length) {
+          continue;
+        }
+        var message = {
+          "index": i,
+          "headers_length": headers.length,
+          "columns_length": columns.length,
+          "message": "It does not match number of headers and columns."
+        };
+        messages.push(message);
+        is_match = false;
+      }
+      return {
+        is_match: is_match,
+        messages: messages
+      };
+    })(headers, lines);
+    if (result_match_columns.is_match === false) {
+      console.log(JSON.stringify(result_match_columns.messages, null, 2));
+      return null;
+    }
+
     var entries_list = [];
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
@@ -75,7 +117,7 @@ CsvUtils.prototype.checkDuplicateValue = function (list, keys) {
 
       for (var j = 0; j < keys.length; j++) {
         var key = keys[j];
-        var in_array = keys_list[key].some(function(v) {
+        var in_array = keys_list[key].some(function (v) {
           return v === entries[key]
         });
         if (in_array === true) {
