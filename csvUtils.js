@@ -1,14 +1,11 @@
-var CsvUtils = function () {
-};
-
-/**
- * カンマ区切りの文字列を連想配列のリストにして返します。
- * @param {String} header_line
- * @param {String} lines
- * @returns {Array}
- */
-CsvUtils.prototype.toHashMap = function (header_line, lines) {
-  try {
+class CsvUtils {
+  /**
+   * カンマ区切りの文字列を連想配列のリストにして返します。
+   * @param {String} header_line
+   * @param {String} lines
+   * @returns {Array}
+   */
+  toHashMap(header_line, lines) {
     var createEntries = function (headers, columns) {
       var entries = {};
       for (var i = 0; i < columns.length; i++) {
@@ -18,7 +15,6 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
           entries[key] = value;
           continue;
         }
-
         var split_keys = key.split(".");
         var target = entries;
         key = split_keys.pop();
@@ -33,7 +29,6 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
       }
       return entries;
     };
-
     // trim empty line
     (function (lines) {
       var empty_lines = [];
@@ -41,13 +36,11 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
         var line = lines[i];
         if (line === "") empty_lines.push(i);
       }
-      console.log(empty_lines);
       for (var index = empty_lines.length - 1; index >= 0; index--) {
         var target = empty_lines[index];
         lines.splice(target, 1);
       }
     })(lines);
-
     var headers = header_line.split(",");
     var result_match_columns = (function () {
       var is_match = true;
@@ -59,7 +52,7 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
           continue;
         }
         var message = {
-          "index": i,
+          index: i,
           "headers_length": headers.length,
           "columns_length": columns.length,
           "message": "It does not match number of headers and columns."
@@ -76,7 +69,6 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
       console.log(JSON.stringify(result_match_columns.messages, null, 2));
       return null;
     }
-
     var entries_list = [];
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
@@ -84,22 +76,16 @@ CsvUtils.prototype.toHashMap = function (header_line, lines) {
       var entries = createEntries(headers, columns);
       entries_list.push(entries);
     }
-
     return entries_list;
-  } catch (e) {
-    throw e;
   }
-};
 
-/**
- * 連想配列のリストから任意のキーで重複した値があるかチェックします
- * @param list
- * @param keys Array
- * @returns {{is_duplicate: boolean, messages: Array}}
- */
-CsvUtils.prototype.checkDuplicateValue = function (list, keys) {
-
-  try {
+  /**
+   * 連想配列のリストから任意のキーで重複した値があるかチェックします
+   * @param list
+   * @param keys Array
+   * @returns {{is_duplicate: boolean, messages: Array}}
+   */
+  checkDuplicateValue(list, keys) {
     var is_duplicate = false;
     var messages = [];
     var keys_list = (function (keys) {
@@ -110,11 +96,8 @@ CsvUtils.prototype.checkDuplicateValue = function (list, keys) {
       }
       return keys_list;
     })(keys);
-
-
     for (var i = 0; i < entries_list.length; i++) {
       var entries = entries_list[i];
-
       for (var j = 0; j < keys.length; j++) {
         var key = keys[j];
         var in_array = keys_list[key].some(function (v) {
@@ -137,7 +120,5 @@ CsvUtils.prototype.checkDuplicateValue = function (list, keys) {
       "is_duplicate": is_duplicate,
       "messages": messages
     };
-  } catch (e) {
-    throw e;
   }
 };
