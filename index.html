@@ -8,19 +8,18 @@
 </body>
 <script type="text/javascript">
     var csv = new CsvUtils();
-    console.log(csv);
-    var header_line = "id,name,profile.birth.year,profile.birth.day,profile.blood,profile.address";
+    var header_line = 'id,name,profile.birth.year,profile.birth.day,profile.blood,profile.address';
     var lines = [
-        "1,ito,1990,06-06,O,Minato-Ku Tokyo",
-        "1,ito,1991,06-06,O,Minato-Ku Tokyo",
-        "3,ito,1991,06-06,O,Minato-Ku Tokyo"
+        '1,ito,1990,06-06,O,Minato-Ku Tokyo',
+        '1,ito,1991,06-06,O,Minato-Ku Tokyo',
+        '3,ito,1991,06-06,O,Minato-Ku Tokyo'
     ];
     var entries_list = csv.toHashMap(header_line, lines);
-    console.log("entries_list: ", JSON.stringify(entries_list, null, 2));
+    console.log('entries_list: ', JSON.stringify(entries_list, null, 2));
 
     var duplicate_result = csv.checkDuplicateValue(
-        entries_list, ["id"]
+        entries_list, ['id']
     );
-    console.log("duplicate_result: ", JSON.stringify(duplicate_result, null, 2));
+    console.log('duplicate_result', JSON.stringify(duplicate_result, null, 2));
 </script>
 </html>

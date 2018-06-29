@@ -11,11 +11,11 @@ class CsvUtils {
       for (var i = 0; i < columns.length; i++) {
         var key = headers[i];
         var value = columns[i];
-        if (key.split(".").length <= 1) {
+        if (key.split('.').length <= 1) {
           entries[key] = value;
           continue;
         }
-        var split_keys = key.split(".");
+        var split_keys = key.split('.');
         var target = entries;
         key = split_keys.pop();
         for (var j = 0; j < split_keys.length; j++) {
@@ -34,28 +34,28 @@ class CsvUtils {
       var empty_lines = [];
       for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
-        if (line === "") empty_lines.push(i);
+        if (line === '') empty_lines.push(i);
       }
       for (var index = empty_lines.length - 1; index >= 0; index--) {
         var target = empty_lines[index];
         lines.splice(target, 1);
       }
     })(lines);
-    var headers = header_line.split(",");
+    var headers = header_line.split(',');
     var result_match_columns = (function () {
       var is_match = true;
       var messages = [];
       for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
-        var columns = line.split(",");
+        var columns = line.split(',');
         if (headers.length === columns.length) {
           continue;
         }
         var message = {
           index: i,
-          "headers_length": headers.length,
-          "columns_length": columns.length,
-          "message": "It does not match number of headers and columns."
+          headers_length: headers.length,
+          columns_length: columns.length,
+          message: 'It does not match number of headers and columns.'
         };
         messages.push(message);
         is_match = false;
@@ -72,7 +72,7 @@ class CsvUtils {
     var entries_list = [];
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
-      var columns = line.split(",");
+      var columns = line.split(',');
       var entries = createEntries(headers, columns);
       entries_list.push(entries);
     }
@@ -106,10 +106,10 @@ class CsvUtils {
         if (in_array === true) {
           is_duplicate = true;
           var message = {
-            "index": i,
-            "key": key,
-            "value": entries[key],
-            "message": "Duplicate entries"
+            index: i,
+            key: key,
+            value: entries[key],
+            message: 'Duplicate entries'
           };
           messages.push(message);
         }
@@ -117,8 +117,8 @@ class CsvUtils {
       }
     }
     return {
-      "is_duplicate": is_duplicate,
-      "messages": messages
+      is_duplicate: is_duplicate,
+      messages: messages
     };
   }
 };
