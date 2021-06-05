@@ -11,27 +11,26 @@ export default class {
    * @returns {Array}
    */
   toObjectList() {
-    const createEntries = (headers, columns) => {
+    const createEntries = (values) => {
       var entries = {}
-      for (var i = 0; i < columns.length; i++) {
-        var key = headers[i]
-        var value = columns[i]
+      values.forEach((value, i) => {
+        var key = this.headers[i]
         if (key.split('.').length <= 1) {
           entries[key] = value
-          continue
-        }
-        var split_keys = key.split('.')
-        var target = entries
-        key = split_keys.pop()
-        for (var j = 0; j < split_keys.length; j++) {
-          var split_key = split_keys[j]
-          if (!target[split_key]) {
-            target[split_key] = {}
+        } else {
+          var split_keys = key.split('.')
+          var target = entries
+          key = split_keys.pop()
+          for (var j = 0; j < split_keys.length; j++) {
+            var split_key = split_keys[j]
+            if (!target[split_key]) {
+              target[split_key] = {}
+            }
+            target = target[split_key]
           }
-          target = target[split_key]
+          target[key] = value
         }
-        target[key] = value
-      }
+      })
       return entries
     }
     // trim empty line
@@ -73,14 +72,10 @@ export default class {
       console.log(JSON.stringify(result_match_columns.messages, null, 2))
       return null
     }
-    var entries_list = []
-    for (var i = 0; i < this.lines.length; i++) {
-      var line = this.lines[i]
-      var columns = line.split(',')
-      var entries = createEntries(this.headers, columns)
-      entries_list.push(entries)
-    }
-    return entries_list
+    var entries = this.lines.map((line) => {
+      return createEntries(line.split(','))
+    })
+    return entries
   }
 
   /**
