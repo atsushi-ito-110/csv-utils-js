@@ -34,77 +34,44 @@ export default class {
     if (diff) throw new Error(JSON.stringify(messages, null, 2))
 
   }
+
+  _convertedLines () {
+    const lines = this.lines.map((line) => {
+      return this._convertedLine(line.split(','))
+    })
+    return lines
+  }
+
+  _convertedLine (values) {
+    const entries = {}
+    values.forEach((value, i) => {
+      var key = this.headers[i]
+      if (key.split('.').length === 1) { // 階層がない場合
+        entries[key] = value
+      } else {
+        var split_keys = key.split('.')
+        var target = entries
+        key = split_keys.pop()
+        for (var j = 0; j < split_keys.length; j++) {
+          var split_key = split_keys[j]
+          if (!target[split_key]) {
+            target[split_key] = {}
+          }
+          target = target[split_key]
+        }
+        target[key] = value
+      }
+    })
+    return entries
+  }
+
   /**
    * カンマ区切りの文字列をObjectの配列にして返します。
    * @param {String} csvString
    * @returns {Array}
    */
   toObjectList() {
-    const createEntries = (values) => {
-      var entries = {}
-      values.forEach((value, i) => {
-        var key = this.headers[i]
-        if (key.split('.').length <= 1) {
-          entries[key] = value
-        } else {
-          var split_keys = key.split('.')
-          var target = entries
-          key = split_keys.pop()
-          for (var j = 0; j < split_keys.length; j++) {
-            var split_key = split_keys[j]
-            if (!target[split_key]) {
-              target[split_key] = {}
-            }
-            target = target[split_key]
-          }
-          target[key] = value
-        }
-      })
-      return entries
-    }
-    // trim empty line
-    (function (lines) {
-      var empty_lines = []
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i]
-        if (line === '') empty_lines.push(i)
-      }
-      for (var index = empty_lines.length - 1; index >= 0; index--) {
-        var target = empty_lines[index]
-        lines.splice(target, 1)
-      }
-    })(this.lines)
-    var result_match_columns = (function (headers, lines) {
-      let is_match = true
-      var messages = []
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i]
-        var columns = line.split(',')
-        if (headers.length === columns.length) {
-          continue
-        }
-        var message = {
-          index: i,
-          headers_length: headers.length,
-          columns_length: columns.length,
-          message: 'It does not match number of headers and columns.'
-        }
-        messages.push(message)
-        is_match = false
-      }
-      return {
-        is_match: is_match,
-        messages: messages
-      }
-    })(this.headers, this.lines)
-    if (result_match_columns.is_match === false) {
-      console.log(JSON.stringify(result_match_columns.messages, null, 2))
-      return null
-    }
-    var entries = this.lines.map((line) => {
-      return createEntries(line.split(','))
-    })
-    return entries
+    return this._convertedLines()
   }
 
   /**
