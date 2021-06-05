@@ -1,0 +1,20 @@
+{
+  "name": "csv-utils",
+  "version": "1.0.0",
+  "description": "``` php -S localhost:9000 http://localhost:9000/ ```",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atsushi-ito-110/csv-utils-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atsushi-ito-110/csv-utils-js/issues"
+  },
+  "homepage": "https://github.com/atsushi-ito-110/csv-utils-js#readme",
+  "type": "module"
+}
