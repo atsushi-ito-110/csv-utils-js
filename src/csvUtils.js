@@ -32,7 +32,6 @@ export default class {
       messages.push(message)
     })
     if (diff) throw new Error(JSON.stringify(messages, null, 2))
-
   }
 
   _convertedLines () {
@@ -45,15 +44,15 @@ export default class {
   _convertedLine (values) {
     const entries = {}
     values.forEach((value, i) => {
-      var key = this.headers[i]
+      let key = this.headers[i]
       if (key.split('.').length === 1) { // 階層がない場合
         entries[key] = value
       } else {
-        var split_keys = key.split('.')
-        var target = entries
-        key = split_keys.pop()
-        for (var j = 0; j < split_keys.length; j++) {
-          var split_key = split_keys[j]
+        const splitKeys = key.split('.')
+        let target = entries
+        key = splitKeys.pop()
+        for (let j = 0; j < splitKeys.length; j++) {
+          const split_key = splitKeys[j]
           if (!target[split_key]) {
             target[split_key] = {}
           }
@@ -66,7 +65,7 @@ export default class {
   }
 
   /**
-   * カンマ区切りの文字列をObjectの配列にして返します。
+   * カンマ区切りの文字列をObject{}の配列[]にして返します。
    * @param {String} csvString
    * @returns {Array}
    */
