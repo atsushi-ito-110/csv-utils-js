@@ -1,9 +1,38 @@
 export default class {
   constructor(csvString) {
-    this.name = 'Polygon';
-    const lines = csvString.split('\n')
+    const lines = this._trimEmptyLine(csvString).split('\n')
     this.headers = lines.shift().split(',')
     this.lines = lines
+    this._validateColumns()
+  }
+
+  _trimEmptyLine (linesString) {
+    const lines = []
+    linesString.split('\n').forEach((line) => {
+      if (line === '') return true;
+      lines.push(line)
+    })
+    return lines.join('\n')
+  }
+
+  _validateColumns () {
+    let diff = false
+    const messages = [
+      { headerLength: this.headers.length }
+    ]
+    this.lines.forEach((line) => {
+      const columns = line.split(',')
+      if (this.headers.length === columns.length) return true
+      const message = {
+        id: line[0],
+        columnLength: columns.length,
+        message: 'It does not match number of headers and columns.'
+      }
+      diff = true
+      messages.push(message)
+    })
+    if (diff) throw new Error(JSON.stringify(messages, null, 2))
+
   }
   /**
    * カンマ区切りの文字列をObjectの配列にして返します。
