@@ -83,8 +83,6 @@ export default class {
    * @returns {duplicated: boolean, messages: Array}
    */
   checkDuplicateValue(rows, keys) {
-    let duplicated = false
-    const messages = []
     const keysList = (function (keys) {
       var keys_list = {}
       for (var i = 0; i < keys.length; i++) {
@@ -93,21 +91,21 @@ export default class {
       }
       return keys_list
     })(keys)
+    let duplicated = false
+    const messages = []
     rows.forEach((entries, i) => {
       keys.forEach((key) => {
         const in_array = keysList[key].some(function (v) {
           return v === entries[key]
         })
-        console.log(in_array)
         if (in_array === true) {
           duplicated = true
-          var message = {
+          messages.push({
             index: i,
             key: key,
             value: entries[key],
             message: 'There are duplicates'
-          }
-          messages.push(message)
+          })
         }
         keysList[key].push(entries[key])
       })
