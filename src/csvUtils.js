@@ -3,6 +3,10 @@ export default class {
     const lines = this._trimEmptyLine(csvString).split('\n')
     this.headers = lines.shift().split(',')
     this.lines = lines
+    this._validate()
+  }
+
+  _validate() {
     this._validateColumns()
   }
 
@@ -66,7 +70,6 @@ export default class {
 
   /**
    * カンマ区切りの文字列をObject{}の配列[]にして返します。
-   * @param {String} csvString
    * @returns {Array}
    */
   toObjectList() {
@@ -77,12 +80,12 @@ export default class {
    * 任意のキーで重複した値があるかチェックします
    * @param list
    * @param keys Array
-   * @returns {{is_duplicate: boolean, messages: Array}}
+   * @returns {duplicated: boolean, messages: Array}
    */
-  checkDuplicateValue(entries_list, keys) {
-    var is_duplicate = false
-    var messages = []
-    var keys_list = (function (keys) {
+  checkDuplicateValue(rows, keys) {
+    let duplicated = false
+    const messages = []
+    const keysList = (function (keys) {
       var keys_list = {}
       for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
@@ -90,28 +93,27 @@ export default class {
       }
       return keys_list
     })(keys)
-    for (var i = 0; i < entries_list.length; i++) {
-      var entries = entries_list[i]
-      for (var j = 0; j < keys.length; j++) {
-        var key = keys[j]
-        var in_array = keys_list[key].some(function (v) {
+    rows.forEach((entries, i) => {
+      keys.forEach((key) => {
+        const in_array = keysList[key].some(function (v) {
           return v === entries[key]
         })
+        console.log(in_array)
         if (in_array === true) {
-          is_duplicate = true
+          duplicated = true
           var message = {
             index: i,
             key: key,
             value: entries[key],
-            message: 'Duplicate entries'
+            message: 'There are duplicates'
           }
           messages.push(message)
         }
-        keys_list[key].push(entries[key])
-      }
-    }
+        keysList[key].push(entries[key])
+      })
+    })
     return {
-      is_duplicate: is_duplicate,
+      duplicated: duplicated,
       messages: messages
     }
   }
