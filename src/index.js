@@ -1,16 +1,13 @@
+import fs from 'fs'
 import CsvUtils from './csvUtils.js'
 
-// TODO: ファイルを読み込む的な感じにするのもありかも
-const csvString = `
-id,name,profile.birth.year,profile.birth.day,profile.blood,profile.address,hoge.fuga.hoge.fuga
-1,ito,1990,06-06,O,Minato-Ku Tokyo,aaa
-2,saito,1991,06-06,O,Minato-Ku Tokyo,aaa
-3,naito,1991,06-06,O,Minato-Ku Tokyo,bbb
-`
+const fileBody = fs.readFileSync('./data/success.csv', 'utf-8')
+console.log('fileBody', fileBody)
 
-const csv = new CsvUtils(csvString)
+const csv = new CsvUtils(fileBody)
 const usres = csv.toObjectList()
 console.log('usres:', JSON.stringify(usres, null, 2))
 
+// カラム数などチェックする場合これ
 // const duplicateResult = csv.checkDuplicateValue(usres, ['id', 'name'])
 // console.log('duplicateResult', JSON.stringify(duplicateResult, null, 2))
