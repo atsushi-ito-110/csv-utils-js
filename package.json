@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node src/index.js"
+    "test:success": "node src/index.js success.csv",
+    "test:example": "node src/index.js success.csv.example"
   },
   "repository": {
     "type": "git",

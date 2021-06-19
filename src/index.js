@@ -1,7 +1,8 @@
 import fs from 'fs'
 import CsvUtils from './csvUtils.js'
 
-const fileBody = fs.readFileSync('./data/success.csv', 'utf-8')
+const fileName = process.argv[2]
+const fileBody = fs.readFileSync(`./data/${fileName}`, 'utf-8')
 console.log('fileBody', fileBody)
 
 const csv = new CsvUtils(fileBody)
