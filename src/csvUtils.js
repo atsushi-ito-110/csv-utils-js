@@ -1,4 +1,9 @@
 export default class {
+  /**
+   * CSV文字列を素に項目をthis.headersにと実データをthis.linesに格納します
+   *
+   * @param {String} csvString
+   */
   constructor(csvString) {
     const lines = this._trimEmptyLine(csvString).split('\n')
     this.headers = lines.shift().split(',')
@@ -10,6 +15,11 @@ export default class {
     this._validateColumns()
   }
 
+  /**
+   * 空行を削除して配列で返します
+   * @param {String} linesString
+   * @returns {Array}
+   */
   _trimEmptyLine (linesString) {
     const lines = []
     linesString.split('\n').forEach((line) => {
@@ -19,6 +29,11 @@ export default class {
     return lines.join('\n')
   }
 
+  /**
+   * headerの項目数とlinesの項目数を比較します
+   *
+   * @throws 不一致のレコードが一つでも存在した場合
+   */
   _validateColumns () {
     let diff = false
     const messages = [
